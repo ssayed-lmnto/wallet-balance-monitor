@@ -4,7 +4,7 @@
   "description": "Telegram bot for automated wallet balance reports",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node -e \"const fs=require('fs');fs.writeFileSync('config.js','module.exports={withdraw:{polygon:process.env.WITHDRAW_POLYGON,arbitrum:process.env.WITHDRAW_ARBITRUM,tron:process.env.WITHDRAW_TRON},depositGas:{polygon:process.env.DEPOSIT_GAS_POLYGON,arbitrum:process.env.DEPOSIT_GAS_ARBITRUM,tron:process.env.DEPOSIT_GAS_TRON}};');\" && node index.js",
     "test": "node test-bot.js"
   },
   "keywords": ["telegram", "crypto", "wallet", "balance"],
