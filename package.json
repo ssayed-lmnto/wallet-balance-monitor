@@ -1,0 +1,20 @@
+{
+  "name": "telegram-wallet-bot",
+  "version": "1.0.0",
+  "description": "Telegram bot for automated wallet balance reports",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node test-bot.js"
+  },
+  "keywords": ["telegram", "crypto", "wallet", "balance"],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "node-telegram-bot-api": "^0.64.0",
+    "node-cron": "^3.0.3",
+    "ethers": "^6.9.0",
+    "tronweb": "^5.3.2",
+    "dotenv": "^16.3.1"
+  }
+}
