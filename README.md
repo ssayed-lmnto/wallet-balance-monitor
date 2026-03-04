@@ -1,5 +1,7 @@
 # Crypto Wallet Balance Monitor
 
+> ⚠️ **SECURITY NOTICE**: This repository is public. Never commit your `.env` file or `config.js` file containing your actual wallet addresses and API keys. These files are gitignored by default.
+
 Automated Telegram bot for monitoring cryptocurrency wallet balances across multiple blockchain networks. Sends scheduled balance reports twice daily to a designated Telegram channel.
 
 ## Features
@@ -116,30 +118,28 @@ ARBITRUM_RPC_URL=https://arbitrum.drpc.org
 TRON_FULL_NODE=https://api.trongrid.io
 ```
 
-### Step 4: Add config.js via Render Shell
+### Step 4: Create config.js File
 
-After deployment, you need to add your `config.js` file:
+**IMPORTANT:** Your wallet addresses should never be in the Git repository. You have two options:
 
-1. In Render dashboard, go to your service
-2. Click **Shell** tab
-3. Run:
-   ```bash
-   cat > config.js << 'EOF'
-   module.exports = {
-     withdraw: {
-       polygon: 'YOUR_POLYGON_WALLET',
-       arbitrum: 'YOUR_ARBITRUM_WALLET',
-       tron: 'YOUR_TRON_WALLET'
-     },
-     depositGas: {
-       polygon: 'YOUR_POLYGON_GAS_WALLET',
-       arbitrum: 'YOUR_ARBITRUM_GAS_WALLET',
-       tron: 'YOUR_TRON_GAS_WALLET'
-     }
-   };
-   EOF
-   ```
-4. Manually deploy again from Render dashboard
+**Option A: Environment Variables (Recommended for Public Repos)**
+
+Add wallet addresses as environment variables in Render:
+
+```
+WITHDRAW_POLYGON=0xYourPolygonWallet
+WITHDRAW_ARBITRUM=0xYourArbitrumWallet
+WITHDRAW_TRON=TYourTronWallet
+DEPOSIT_GAS_POLYGON=0xYourPolygonGasWallet
+DEPOSIT_GAS_ARBITRUM=0xYourArbitrumGasWallet
+DEPOSIT_GAS_TRON=TYourTronGasWallet
+```
+
+Then update `config.js` to read from environment variables (see config.example.js).
+
+**Option B: Render Shell (For Private Deployments)**
+
+In Render dashboard → Shell tab, create the config file manually. Contact repository maintainer for template.
 
 ### Step 5: Verify
 
