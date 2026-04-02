@@ -371,29 +371,35 @@ async function sendBalanceReport() {
  * Initialize the scheduler
  */
 function initializeScheduler() {
-  const schedule1 = process.env.SCHEDULE_1 || '0 9 * * *';  // 09:00 UTC
-  const schedule2 = process.env.SCHEDULE_2 || '0 21 * * *'; // 21:00 UTC
+  // Support unlimited schedules via comma-separated SCHEDULES variable
+  // Falls back to SCHEDULE_1 and SCHEDULE_2 for backward compatibility
+  let schedules;
+  
+  if (process.env.SCHEDULES) {
+    schedules = process.env.SCHEDULES.split(',').map(s => s.trim());
+  } else {
+    const schedule1 = process.env.SCHEDULE_1 || '0 9 * * *';
+    const schedule2 = process.env.SCHEDULE_2 || '0 21 * * *';
+    schedules = [schedule1, schedule2];
+  }
   
   console.log('🤖 Telegram Wallet Balance Bot Starting...');
-  console.log('📅 Schedule 1 (Morning):', schedule1);
-  console.log('📅 Schedule 2 (Evening):', schedule2);
+  console.log(`📅 Configured ${schedules.length} schedule(s):`);
+  schedules.forEach((schedule, index) => {
+    console.log(`   ${index + 1}. ${schedule}`);
+  });
   console.log('💬 Telegram Chat ID:', TELEGRAM_CHAT_ID);
   console.log('🌐 Polygon RPC:', process.env.POLYGON_RPC_URL || 'https://polygon.drpc.org');
   console.log('🌐 Arbitrum RPC:', process.env.ARBITRUM_RPC_URL || 'https://arbitrum.drpc.org');
   console.log('🌐 TRON Node:', process.env.TRON_FULL_NODE || 'https://api.trongrid.io');
-  console.log('🔑 TronGrid API Key:', process.env.TRONGRID_API_KEY ? 'Configured ✅' : 'Not set (using free tier)');
+  console.log('🔑 TronGrid API Key:', process.env.TRONGRID_API_KEY ? 'Configured ✅' : 'Not set');
   console.log('\n');
   
-  // Schedule first run (09:00 UTC)
-  cron.schedule(schedule1, () => {
-    console.log('⏰ Triggered: Morning Report (09:00 UTC)');
-    sendBalanceReport();
-  });
-  
-  // Schedule second run (21:00 UTC)
-  cron.schedule(schedule2, () => {
-    console.log('⏰ Triggered: Evening Report (21:00 UTC)');
-    sendBalanceReport();
+  schedules.forEach((schedule, index) => {
+    cron.schedule(schedule, () => {
+      console.log(`⏰ Triggered: Report ${index + 1} (${schedule})`);
+      sendBalanceReport();
+    });
   });
   
   console.log('✅ Scheduler initialized successfully');
